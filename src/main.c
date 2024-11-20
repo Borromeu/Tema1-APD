@@ -2,6 +2,7 @@
 #include <sys/stat.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <sys/types.h>
 
 /*
     Functie care verifica daca un fisier exista.
@@ -39,6 +40,25 @@ void checkArguments(int argc, char **argv) {
     }
 }
 
+/*
+
+*/
+void readInputFile(char *inputFileName) {
+   
+    FILE* filePointer;
+    int bufferLength = 255;
+    char buffer[bufferLength];
+
+    filePointer = fopen(inputFileName, "r");
+
+    while(fgets(buffer, bufferLength, filePointer)) {
+        printf("%s", buffer);
+    }
+
+    fclose(filePointer);
+    exit(EXIT_SUCCESS);
+}
+
 int main(int argc, char **argv)
 {
     checkArguments(argc, argv);
@@ -48,5 +68,7 @@ int main(int argc, char **argv)
 
     printf("Numarul de mappers este %d\n", numberOfMappers);
     printf("Numarul de reducers este %d\n", numberOfReducers);
+
+    readInputFile(argv[3]);
     return 0;
 }
