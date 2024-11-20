@@ -3,15 +3,20 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-bool file_exists (char *filename) {
+/*
+    Functie care verifica daca un fisier exista.
+*/
+bool fileExists (char *filename) {
     struct stat buffer;   
     return (stat (filename, &buffer) == 0);
 }
 
-int main(int argc, char **argv)
-{
+/*
+    Functie care verifica daca argumentele sunt corecte.
+*/
+void checkArguments(int argc, char **argv) {
     if (argc != 4) {
-        printf("Numar incorect de argumente\n");
+        printf("Numar incorect de argumente.\n");
         exit(1);
     }
     
@@ -19,18 +24,29 @@ int main(int argc, char **argv)
     int numberOfReducers = atoi(argv[2]);
 
     if (numberOfMappers < 1) {
-        printf("Numar incorect de mappers sau reducers\n");
-        exit(1);
+        printf("Numar incorect de mappers.\n");
+        exit(EXIT_FAILURE);
     }
 
     if (numberOfReducers < 1) {
-        printf("Numar incorect de mappers sau reducers\n");
-        exit(1);
+        printf("Numar incorect de mappers.\n");
+        exit(EXIT_FAILURE);
     }
 
-    if (!file_exists(argv[3])) {
-        printf("Fisierul %s nu exista\n", argv[3]);
-        exit(1);
+    if (!fileExists(argv[3])) {
+        printf("Fisierul %s nu exista.\n", argv[3]);
+        exit(EXIT_FAILURE);
     }
+}
+
+int main(int argc, char **argv)
+{
+    checkArguments(argc, argv);
+    
+    int numberOfMappers = atoi(argv[1]);
+    int numberOfReducers = atoi(argv[2]);
+
+    printf("Numarul de mappers este %d\n", numberOfMappers);
+    printf("Numarul de reducers este %d\n", numberOfReducers);
     return 0;
 }
