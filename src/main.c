@@ -40,10 +40,29 @@ void checkArguments(int argc, char **argv) {
     }
 }
 
-/*
+/**
+ * Functie care returneaza dimensiunea unui fisier.
+ */
+size_t findSize(char *fileName) 
+{ 
+    FILE* filePointer = fopen(fileName, "r"); 
+   
+    if (filePointer == NULL) { 
+        printf("File Not Found!\n"); 
+        exit(EXIT_FAILURE); 
+    } 
+  
+    fseek(filePointer, 0L, SEEK_END); 
+    size_t res = ftell(filePointer);  
+    fclose(filePointer); 
+  
+    return res; 
+}
 
+/*
+    Functie care citeste continutul unui fisier, procensandu-l.
 */
-void readInputFile(char *inputFileName) {
+void processInputFiles(char *inputFileName) {
    
     FILE* filePointer;
     int bufferLength = 255;
@@ -52,7 +71,11 @@ void readInputFile(char *inputFileName) {
     filePointer = fopen(inputFileName, "r");
 
     while(fgets(buffer, bufferLength, filePointer)) {
-        printf("%s", buffer);
+        int resultParsingInt = atoi(buffer);
+        if(resultParsingInt == 0) {
+            size_t size = findSize(buffer);
+            printf("Dimensiunea fisierului %s este %ld bytes\n", buffer, size);
+        }
     }
 
     fclose(filePointer);
@@ -69,6 +92,7 @@ int main(int argc, char **argv)
     printf("Numarul de mappers este %d\n", numberOfMappers);
     printf("Numarul de reducers este %d\n", numberOfReducers);
 
-    readInputFile(argv[3]);
+    char *inputFileName = argv[3];
+    processInputFiles(inputFileName);
     return 0;
 }
